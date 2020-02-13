@@ -12,7 +12,6 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "docopt": "^0.6.2",
     "inquirer": "7.0.4"
   }
 }

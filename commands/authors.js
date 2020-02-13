@@ -3,7 +3,7 @@ const fs = require('fs').promises,
     mommitFile = `${homedir}/.mommit`,
     inquirer = require('inquirer');
 
-const list = async () => {
+const get = async () => {
     try {
         let authors = await fs.readFile(`${homedir}/.mommit`);
         return JSON.parse(authors);
@@ -30,7 +30,7 @@ const add = async () => {
         }
     }]);
 
-    const authors = await list();
+    const authors = await get();
     authors.push({
         name: answer.name,
         email: answer.email,
@@ -39,7 +39,7 @@ const add = async () => {
 };
 
 const remove = async () => {
-    const authors = await list();
+    const authors = await get();
     const answers = await inquirer.prompt({
         type: 'checkbox',
         message: 'Select authors to remove:',
@@ -48,21 +48,27 @@ const remove = async () => {
             return { name: `${author.name} <${author.email}>`, value: author.name };
         })
     });
-    const newList = authors.filter(author => {return !answers.authors.includes(author.name)});
+    const newList = authors.filter(author => { return !answers.authors.includes(author.name) });
     await fs.writeFile(mommitFile, JSON.stringify(newList), { flag: 'w' });
 };
 
-const defaultAuthors = async (blah) => {
-    let authors = await list();
+const defaultAuthors = async (selectedAuthors) => {
+    let authors = await get();
     authors = authors.map(author => {
-        author.default = blah.filter(a => {return a.name === author.name}).length > 0;
+        author.default = selectedAuthors.filter(a => { return a.name === author.name }).length > 0;
         return author;
     });
     await fs.writeFile(mommitFile, JSON.stringify(authors), { flag: 'w' });
 };
 
+const list = async () => {
+    const authors = await get();
+    console.table(authors);
+};
+
 module.exports = {
     add: add,
+    get: get,
     default: defaultAuthors,
     list: list,
     remove: remove

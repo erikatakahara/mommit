@@ -3,7 +3,7 @@ const inquirer = require('inquirer'),
     authors = require('./authors');
 
 module.exports = async function(message) {
-    const authorList = await authors.list();
+    const authorList = await authors.get();
     const prompts = [];
     if (!message) {
         prompts.push({
@@ -35,7 +35,7 @@ module.exports = async function(message) {
     });
     const answers = await inquirer.prompt(prompts);
     await authors.default(answers.authors);
-    const formattedAuthors = answers.authors.map(author => {return `-m "Co-authored-by: ${author.name} <${author.email}>"`}).join(' ');
+    const formattedAuthors = answers.authors.map(author => { return `-m "Co-authored-by: ${author.name} <${author.email}>"` }).join(' ');
     exec(`git commit -m "${message || answers.commit}" ${formattedAuthors}`, (err, stdout, stderr) => {
         console.log(`${stdout}`);
     });

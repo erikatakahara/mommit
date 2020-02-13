@@ -6,19 +6,22 @@ const commit = require('./commands/commit'),
 
 async function start() {
     if (!args.length) {
-        commit();
+        await commit();
     } else if (args[0] === 'add') {
         authors.add();
     } else if (args[0] === 'remove') {
-        authors.remove();
+        await authors.remove();
+    } else if (args[0] === 'list') {
+        await authors.list()
     } else if (args[0] === '-h' || args[0] === 'help') {
         console.log(`Usage:
-        mommit "Commit message" | add | delete
+        mommit "Commit message" | add | remove | list
 
         add     - Add new author
-        remove  - Remove author(s)`)
+        remove  - Remove author(s)
+        list    - List stored authors`)
     } else {
-        commit(args[0]);
+        await commit(args[0]);
     }
 }
 start();
