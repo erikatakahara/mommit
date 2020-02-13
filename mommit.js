@@ -1,4 +1,4 @@
-#!/usr/env/bin node
+#!/usr/bin/env node
 
 const commit = require('./commands/commit'),
     authors = require('./commands/authors'),
