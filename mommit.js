@@ -1,3 +1,5 @@
+#!/usr/env/bin node
+
 const commit = require('./commands/commit'),
     authors = require('./commands/authors'),
     args = process.argv.splice(2);
