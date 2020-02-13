@@ -1,0 +1,18 @@
+{
+  "name": "mommit",
+  "version": "1.0.0",
+  "description": "",
+  "main": "mommit.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "bin": {
+    "mommit": "mommit.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "docopt": "^0.6.2",
+    "inquirer": "7.0.4"
+  }
+}
