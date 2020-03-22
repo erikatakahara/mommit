@@ -2,10 +2,10 @@ const inquirer = require('inquirer'),
     { exec } = require('child_process'),
     authors = require('./authors');
 
-module.exports = async function(message) {
+module.exports = async function(opt) {
     const authorList = await authors.get();
     const prompts = [];
-    if (!message) {
+    if (!opt.message) {
         prompts.push({
             type: 'input',
             message: 'Commit message:',
@@ -34,9 +34,23 @@ module.exports = async function(message) {
         }
     });
     const answers = await inquirer.prompt(prompts);
+
+    let command = ['git commit'];
+
+    if (opt.all) {
+        command.push('-a');
+    }
+
+    if (opt.message) {
+        command = command.concat(opt.message.map(message => `-m "${message}"`));
+    } else {
+        command.push(`-m "${answers.commit}"`);
+    }
+
     await authors.default(answers.authors);
-    const formattedAuthors = answers.authors.map(author => { return `-m "Co-authored-by: ${author.name} <${author.email}>"` }).join(' ');
-    exec(`git commit -m "${message || answers.commit}" ${formattedAuthors}`, (err, stdout, stderr) => {
+    command = command.concat(answers.authors.map(author => `-m "Co-authored-by: ${author.name} <${author.email}>"`));
+
+    exec(command.join(' '), (err, stdout, stderr) => {
         console.log(`${stdout}`);
     });
 };
