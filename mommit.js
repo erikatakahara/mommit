@@ -14,7 +14,7 @@ require('yargs')
             .option('m', {
                 alias: 'message',
                 describe: 'Use the given <msg> as the commit message. If multiple -m options are given, their values are concatenated as separate paragraphs.',
-                type: 'array',
+                type: 'string',
             })
             .option('a', {
                 alias: 'all',

@@ -34,21 +34,16 @@ module.exports = async function(opt) {
         }
     });
     const answers = await inquirer.prompt(prompts);
+    await authors.default(answers.authors);
 
-    let command = ['git commit'];
+    let command = ['git commit'],
+        message = opt.message.map(m => `${m}`).join('\\n') || answers.commit,
+        formattedAuthors = answers.authors.map(author => `\\nCo-authored-by: ${author.name} <${author.email}>`).join('');
 
     if (opt.all) {
         command.push('-a');
     }
-
-    if (opt.message) {
-        command = command.concat(opt.message.map(message => `-m "${message}"`));
-    } else {
-        command.push(`-m "${answers.commit}"`);
-    }
-
-    await authors.default(answers.authors);
-    command = command.concat(answers.authors.map(author => `-m "Co-authored-by: ${author.name} <${author.email}>"`));
+    command.push(`-m$'${message}\\n\\n${formattedAuthors}'`);
 
     exec(command.join(' '), (err, stdout, stderr) => {
         console.log(`${stdout}`);
