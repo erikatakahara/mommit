@@ -37,8 +37,12 @@ module.exports = async function(opt) {
     await authors.default(answers.authors);
 
     let command = ['git commit'],
-        message = opt.message.map(m => `${m}`).join('\\n') || answers.commit,
+        message = answers.commit || opt.message,
         formattedAuthors = answers.authors.map(author => `Co-authored-by: ${author.name} <${author.email}>`).join('\\n');
+
+    if (Array.isArray(message)) {
+        message = message.map(m => `${m}`).join('\\n');
+    }
 
     if (opt.all) {
         command.push('-a');
