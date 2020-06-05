@@ -1,3 +1,3 @@
 # mommit
 
-`npm install erikatakahara/mommit`
+`npm install -g erikatakahara/mommit`
