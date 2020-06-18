@@ -6,7 +6,13 @@ const commit = require('./commands/commit'),
 require('yargs')
     .scriptName('mommit')
     .usage('$0 [args] or $0 <cmd>')
-    .command('add', 'add a new commiter', authors.add)
+    .command('add', 'add a new commiter', yargs => {
+        return yargs.option('l', {
+            alias: 'from-git-log',
+            describe: 'Add users from git log',
+            type: 'boolean'
+        })
+    }, authors.add)
     .command('remove', 'remove a commiter', authors.remove)
     .command('list', 'list all commiters', authors.list)
     .command('$0', 'Commit with co-authors', yargs => {
