@@ -4,6 +4,8 @@ const fs = require('fs').promises,
     inquirer = require('inquirer'),
     { exec } = require('child_process');
 
+inquirer.registerPrompt('search-list', require('inquirer-search-list'));
+
 const get = async () => {
     try {
         let authors = await fs.readFile(`${homedir}/.mommit`);
@@ -37,7 +39,7 @@ const dedup = async (stored, added) => {
 };
 
 const add = async (opt) => {
-    if (opt.l) {
+    if (opt.l || opt.s) {
         exec('git --no-pager shortlog master --summary --numbered --email', async (err, stdout) => {
             if (err) console.err('Failed to execute git command');
             let usersFromLog = stdout.split('\n')
@@ -45,13 +47,15 @@ const add = async (opt) => {
                 .filter(entry => entry)
                 .map(([_, name, email]) => { return formatAuthor(name, email)})
                 .sort((a1, a2) => { return a1.name.toUpperCase() < a2.name.toUpperCase()? -1 : 1});
+
             const { authors } = await inquirer.prompt({
-                type: 'checkbox',
+                type: opt.s? 'search-list' : 'checkbox',
                 message: 'Select authors to add:',
                 name: 'authors',
                 choices: usersFromLog.map(author => {
                     return { name: `${author.name} <${author.email}>`, value: author };
-                })
+                }),
+                filter: (answer) => { return Array.isArray(answer)? answer : [answer] }
             });
             const storedAuthors = await get();
             fs.writeFile(mommitFile, JSON.stringify(await dedup(storedAuthors, authors)), { flag: 'w' });
