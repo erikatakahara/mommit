@@ -19,7 +19,7 @@ async function getJiraCode() {
 module.exports = async function (opt) {
   const authorList = await authors.get();
   const prompts = [];
-  if (opt.j) {
+  if (opt.jira) {
     let branch = await getJiraCode();
     prompts.push({
       type: "input",
@@ -29,6 +29,7 @@ module.exports = async function (opt) {
     });
   }
   if (!opt.message) {
+    console.log("! opt msg");
     prompts.push({
       type: "input",
       message: "Commit message:",
