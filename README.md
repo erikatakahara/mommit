@@ -21,6 +21,7 @@ Because it's a pain to always write the co-authors following the [correct format
 ## mommit add
 
 You have three ways to add an author to your mommit:
+
 1. `mommit add` - manually add using the prompt
 1. `mommit add -l` - select from a list of authors from git log
 1. `mommit add -s` - search for a single author from git log
@@ -32,3 +33,7 @@ If you want to remove an author from your list, just call `mommit remove` and se
 ## mommit list
 
 If you want to see which users are already added, just call `mommit list` to see which users are stored inside mommit.
+
+## add jira code
+
+If you want to add the JIRA code to your commit in the format `[<ticket-number>] <commit-message>`, create a branch starting with the ticket number and use the `-j` flag. Example: using the command `mommit -j` on the branch `MS-101-branch-description` will create a commit on the format `[MS-101] Testing`.

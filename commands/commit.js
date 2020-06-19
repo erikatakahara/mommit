@@ -2,14 +2,30 @@ const inquirer = require("inquirer"),
   { exec } = require("child_process"),
   authors = require("./authors");
 
+async function getJiraCode() {
+  let promise = new Promise((resolve, reject) => {
+    exec("git rev-parse --abbrev-ref HEAD", (stderr, stdout) => {
+      let currentJiraCode = "";
+      const branch = stdout.trim().split("-").splice(0, 2);
+      if (branch[0] === branch[0].toUpperCase() && !isNaN(branch[1])) {
+        currentJiraCode = branch.join("-");
+      }
+      resolve(stdout ? currentJiraCode : stderr);
+    });
+  });
+  return promise.then((jiraCode) => jiraCode);
+}
+
 module.exports = async function (opt) {
   const authorList = await authors.get();
   const prompts = [];
   if (opt.j) {
+    let branch = await getJiraCode();
     prompts.push({
       type: "input",
-      message: "Branch:",
+      message: "JIRA code:",
       name: "branch",
+      default: branch,
     });
   }
   if (!opt.message) {
