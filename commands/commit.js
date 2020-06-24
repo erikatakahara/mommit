@@ -25,7 +25,7 @@ module.exports = async function (opt) {
             type: 'input',
             message: 'JIRA code:',
             name: 'branch',
-            default: branch,
+            default: branch
         });
     }
     if (!opt.message) {
@@ -34,21 +34,19 @@ module.exports = async function (opt) {
             message: 'Commit message:',
             name: 'commit',
             validate: function (answer) {
-                return answer.trim() === ''
-                    ? 'You should write a message for your commit'
-                    : true;
-            },
+                return answer.trim() === '' ? 'You should write a message for your commit' : true;
+            }
         });
     }
     prompts.push({
         type: 'checkbox',
         message: 'Select authors:',
         name: 'authors',
-        choices: authorList.map((author) => {
+        choices: authorList.map(author => {
             return {
                 name: author.name,
                 value: author,
-                checked: author.default,
+                checked: author.default
             };
         }),
         validate: function (answer) {
@@ -56,7 +54,7 @@ module.exports = async function (opt) {
                 return 'You must choose at least one author.';
             }
             return true;
-        },
+        }
     });
     const answers = await inquirer.prompt(prompts);
     await authors.default(answers.authors);
@@ -64,12 +62,10 @@ module.exports = async function (opt) {
     let command = ['git commit'],
         message = answers.commit || opt.message,
         branch = answers.branch ? `[${answers.branch}] ` : ``,
-        formattedAuthors = answers.authors
-            .map((author) => `Co-authored-by: ${author.name} <${author.email}>`)
-            .join('\\n');
+        formattedAuthors = answers.authors.map(author => `Co-authored-by: ${author.name} <${author.email}>`).join('\\n');
 
     if (Array.isArray(message)) {
-        message = message.map((m) => `${m}`).join('\\n');
+        message = message.map(m => `${m}`).join('\\n');
     }
 
     if (opt.all) {
