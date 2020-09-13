@@ -9,7 +9,7 @@
   "bin": {
     "mommit": "mommit.js"
   },
-  "author": "",
+  "author": "Erika Takahara",
   "license": "ISC",
   "dependencies": {
     "inquirer": "7.0.4",
