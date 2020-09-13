@@ -38,6 +38,16 @@ require('yargs')
                 describe: 'Add JIRA code.',
                 type: 'boolean',
             })
+            .option('s', {
+                alias: 'semantic',
+                describe: 'Uses semantic release commit format.',
+                type: 'boolean',
+            })
+            .option('d', {
+                alias: 'dryrun',
+                describe: 'run commit on dry-run',
+                type: 'boolean',
+            })
     }, commit)
     .help()
     .argv;
