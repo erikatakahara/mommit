@@ -1,6 +1,6 @@
 {
   "name": "@erikatakahara/mommit",
-  "version": "1.0.0",
+  "version": "1.2.0",
   "description": "A simple and visual way to add co-authors on your commit!",
   "main": "mommit.js",
   "scripts": {
