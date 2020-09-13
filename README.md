@@ -38,3 +38,7 @@ If you want to see which users are already added, just call `mommit list` to see
 
 If you want to add the JIRA code to your commit in the format `[<ticket-number>] <commit-message>`, create a branch starting with the ticket number and use the `-j` flag.  
 Example: using the command `mommit -jam "Testing"` on the branch `MS-101-branch-description` will `git add` the files and create a commit on the format `[MS-101] Testing`.
+
+## semantic release format
+
+In case you use sematic release format, you can add `-s` flag.
