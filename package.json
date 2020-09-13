@@ -1,10 +1,11 @@
 {
   "name": "@erikatakahara/mommit",
-  "version": "1.1.0",
+  "version": "0.0.0-development",
   "description": "A simple and visual way to add co-authors on your commit!",
   "main": "mommit.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "semantic-release": "semantic-release"
   },
   "bin": {
     "mommit": "mommit.js"
@@ -16,10 +17,12 @@
     "inquirer-search-list": "1.2.6",
     "yargs": "15.3.1"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "semantic-release": "^17.1.1"
+  },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/erikatakahara/mommit.git"
+    "url": "https://github.com/erikatakahara/mommit.git"
   },
   "keywords": [
     "git",
