@@ -43,6 +43,11 @@ require('yargs')
                 describe: 'Uses semantic release commit format.',
                 type: 'boolean',
             })
+            .option('b', {
+                alias: 'body',
+                describe: 'Add body to commit, works with semantic release format.',
+                type: 'boolean',
+            })
             .option('d', {
                 alias: 'dryrun',
                 describe: 'run commit on dry-run',
