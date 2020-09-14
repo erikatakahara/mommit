@@ -1,3 +1,4 @@
+/*eslint no-unused-vars: ["error", { "argsIgnorePattern": "^_" }]*/
 const inquirer = require('inquirer'),
 	{ exec } = require('child_process'),
 	authors = require('./authors');
@@ -210,14 +211,10 @@ module.exports = async function (opt) {
 	}
 	command.push(`-m$'${message}'`);
 
-	exec(command.join(' '), (err, stdout, stderr) => {
+	exec(command.join(' '), (_, stdout) => {
 		if (opt.dryrun) {
 			console.log(`==== Commit message ====\n\n${message.replace(/\\n/g, '\n')}\n\n========================\n\n`);
 		}
-		if (err) {
-			console.log(`${err}${stderr}`);
-		} else {
-			console.log(`${stdout}`);
-		}
+		console.log(`${stdout}`);
 	});
 };
