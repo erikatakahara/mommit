@@ -10,7 +10,7 @@ Because it's a pain to always write the co-authors following the [correct format
 
 # Install globally
 
-`npm install -g erikatakahara/mommit`
+`npm install -g @erikatakahara/mommit`
 
 # Usage
 
