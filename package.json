@@ -2,13 +2,15 @@
   "name": "@erikatakahara/mommit",
   "version": "1.2.0",
   "description": "A simple and visual way to add co-authors on your commit!",
-  "main": "mommit.js",
+  "main": "src/mommit.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "semantic-release": "semantic-release"
+    "semantic-release": "semantic-release",
+    "lint": "eslint src",
+    "lint-fix": "eslint src --fix"
   },
   "bin": {
-    "mommit": "mommit.js"
+    "mommit": "src/mommit.js"
   },
   "author": "Erika Takahara",
   "license": "ISC",
@@ -18,6 +20,7 @@
     "yargs": "15.3.1"
   },
   "devDependencies": {
+    "eslint": "^7.9.0",
     "semantic-release": "^17.1.1"
   },
   "repository": {
