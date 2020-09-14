@@ -78,17 +78,58 @@ async function semantic(opt) {
         });
     }
 
+    if (opt.body) {
+        prompts.push({
+            type: 'editor',
+            message: 'Body:',
+            name: 'body',
+            validate: function (answer) {
+                return answer.trim() === '' ? 'You should add a description for your commit' : true;
+            }
+        });
+    }
+
+    prompts.push({
+        type: 'boolean',
+        message: 'Breaking change?',
+        name: 'breakingChange',
+        default: false
+    });
+
+    prompts.push({
+        type: 'editor',
+        name: 'breakingChangeMessage',
+        message: 'Breaking change message:',
+        when: function (answers) {
+            return answers.breakingChange;
+        },
+        validate: function (answer) {
+            return answer.trim() === '' ? 'You should explain the breaking change' : true;
+        }
+    });
+
     return {
         prompts,
         message: function(opt, answers) {
-            let subject = answers.subject || Array.isArray(opt.message)? opt.message[0] : opt.message;
+            let subject = answers.subject || Array.isArray(opt.message)? opt.message[0] : opt.message,
+                message = [];
             subject = subject.charAt(0).toLowerCase() + subject.slice(1);
 
             if (Array.isArray(opt.message)) {
                 let message = opt.message.splice(0, 1).map(m => `${m}`).join('\\n');
                 subject = `${subject}\n\n${message}`;
             }
-            return `${answers.type}(${answers.scope}): ${subject}`;
+            message.push(`${answers.type}(${answers.scope}): ${subject}`);
+
+            if (answers.body) {
+                message.push(answers.body);
+            }
+
+            if(answers.breakingChange) {
+                message.push(`BREAKING CHANGE: ${answers.breakingChangeMessage}`);
+            }
+
+            return message.join('\n\n');
         }
     }
 
@@ -97,36 +138,48 @@ async function semantic(opt) {
 async function simple(opt) {
     const prompts = [];
     if (opt.jira) {
-            let branch = await getJiraCode();
-            prompts.push({
-                type: 'input',
-                message: 'JIRA code:',
-                name: 'branch',
-                default: branch
-            });
-        }
+        let branch = await getJiraCode();
+        prompts.push({
+            type: 'input',
+            message: 'JIRA code:',
+            name: 'branch',
+            default: branch
+        });
+    }
 
-        if (!opt.message) {
-            prompts.push({
-                type: 'input',
-                message: 'Commit message:',
-                name: 'commit',
-                validate: function (answer) {
-                    return answer.trim() === '' ? 'You should write a message for your commit' : true;
-                }
-            });
-        }
+    if (!opt.message) {
+        prompts.push({
+            type: 'input',
+            message: 'Commit message:',
+            name: 'commit',
+            validate: function (answer) {
+                return answer.trim() === '' ? 'You should write a message for your commit' : true;
+            }
+        });
+    }
+
+    if (opt.body) {
+        prompts.push({
+            type: 'editor',
+            message: 'Body:',
+            name: 'body',
+            validate: function (answer) {
+                return answer.trim() === '' ? 'You should add a description for your commit' : true;
+            }
+        });
+    }
 
     return {
         prompts,
         message: function(opt, answers) {
             let message = answers.commit || opt.message,
-                branch = answers.branch ? `[${answers.branch}] ` : ``;
+                branch = answers.branch ? `[${answers.branch}] ` : '',
+                body = answers.body? `\\n\\n${answers.body}` : '';
 
             if (Array.isArray(message)) {
                 message = message.map(m => `${m}`).join('\\n');
             }
-            return `${branch}${message}`;
+            return `${branch}${message}${body}`;
         }
     }
     
