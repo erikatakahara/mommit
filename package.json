@@ -15,12 +15,12 @@
 	"author": "Erika Takahara",
 	"license": "ISC",
 	"dependencies": {
-		"inquirer": "7.0.4",
+		"inquirer": "8.1.2",
 		"inquirer-search-list": "1.2.6",
-		"yargs": "15.3.1"
+		"yargs": "17.1.1"
 	},
 	"devDependencies": {
-		"eslint": "^7.9.0",
+		"eslint": "7.32.0",
 		"semantic-release": "^17.4.7"
 	},
 	"repository": {
