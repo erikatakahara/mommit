@@ -1,39 +1,39 @@
 {
-  "name": "@erikatakahara/mommit",
-  "version": "1.2.0",
-  "description": "A simple and visual way to add co-authors on your commit!",
-  "main": "src/mommit.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "semantic-release": "semantic-release",
-    "lint": "eslint src",
-    "lint-fix": "eslint src --fix"
-  },
-  "bin": {
-    "mommit": "src/mommit.js"
-  },
-  "author": "Erika Takahara",
-  "license": "ISC",
-  "dependencies": {
-    "inquirer": "7.0.4",
-    "inquirer-search-list": "1.2.6",
-    "yargs": "15.3.1"
-  },
-  "devDependencies": {
-    "eslint": "^7.9.0",
-    "semantic-release": "^17.1.1"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/erikatakahara/mommit.git"
-  },
-  "keywords": [
-    "git",
-    "js",
-    "co-authors"
-  ],
-  "bugs": {
-    "url": "https://github.com/erikatakahara/mommit/issues"
-  },
-  "homepage": "https://github.com/erikatakahara/mommit#readme"
+	"name": "@erikatakahara/mommit",
+	"version": "1.2.0",
+	"description": "A simple and visual way to add co-authors on your commit!",
+	"main": "src/mommit.js",
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1",
+		"semantic-release": "semantic-release",
+		"lint": "eslint src",
+		"lint-fix": "eslint src --fix"
+	},
+	"bin": {
+		"mommit": "src/mommit.js"
+	},
+	"author": "Erika Takahara",
+	"license": "ISC",
+	"dependencies": {
+		"inquirer": "7.0.4",
+		"inquirer-search-list": "1.2.6",
+		"yargs": "15.3.1"
+	},
+	"devDependencies": {
+		"eslint": "^7.9.0",
+		"semantic-release": "^17.4.7"
+	},
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/erikatakahara/mommit.git"
+	},
+	"keywords": [
+		"git",
+		"js",
+		"co-authors"
+	],
+	"bugs": {
+		"url": "https://github.com/erikatakahara/mommit/issues"
+	},
+	"homepage": "https://github.com/erikatakahara/mommit#readme"
 }

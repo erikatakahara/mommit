@@ -1,6 +1,7 @@
 /*eslint no-unused-vars: ["error", { "argsIgnorePattern": "^_" }]*/
 const inquirer = require('inquirer'),
 	{ exec } = require('child_process'),
+	process = require('process'),
 	authors = require('./authors');
 
 let types = [
@@ -34,13 +35,13 @@ async function authorList() {
 		type: 'checkbox',
 		message: 'Select authors:',
 		name: 'authors',
-		choices: authorList.map(author => {
+		choices: authorList.map((author) => {
 			return {
 				name: author.name,
 				value: author,
-				checked: author.default
+				checked: author.default,
 			};
-		})
+		}),
 	};
 }
 
@@ -55,7 +56,7 @@ async function semantic(opt) {
 		loop: false,
 		filter: (type) => {
 			return type.split(':')[0];
-		}
+		},
 	});
 
 	prompts.push({
@@ -64,8 +65,10 @@ async function semantic(opt) {
 		name: 'scope',
 		default: branch,
 		validate: function (answer) {
-			return answer.trim() === '' ? 'You should write a scope for your commit. The scope could be anything specifying place of the commit change. You can use * when the change affects more than a single scope.' : true;
-		}
+			return answer.trim() === ''
+				? 'You should write a scope for your commit. The scope could be anything specifying place of the commit change. You can use * when the change affects more than a single scope.'
+				: true;
+		},
 	});
 
 	if (!opt.message) {
@@ -74,8 +77,10 @@ async function semantic(opt) {
 			message: 'Subject:',
 			name: 'subject',
 			validate: function (answer) {
-				return answer.trim() === '' ? 'You should write a subject for your commit' : true;
-			}
+				return answer.trim() === ''
+					? 'You should write a subject for your commit'
+					: true;
+			},
 		});
 	}
 
@@ -85,8 +90,10 @@ async function semantic(opt) {
 			message: 'Body:',
 			name: 'body',
 			validate: function (answer) {
-				return answer.trim() === '' ? 'You should add a description for your commit' : true;
-			}
+				return answer.trim() === ''
+					? 'You should add a description for your commit'
+					: true;
+			},
 		});
 	}
 
@@ -94,7 +101,7 @@ async function semantic(opt) {
 		type: 'boolean',
 		message: 'Breaking change?',
 		name: 'breakingChange',
-		default: false
+		default: false,
 	});
 
 	prompts.push({
@@ -105,19 +112,26 @@ async function semantic(opt) {
 			return answers.breakingChange;
 		},
 		validate: function (answer) {
-			return answer.trim() === '' ? 'You should explain the breaking change' : true;
-		}
+			return answer.trim() === ''
+				? 'You should explain the breaking change'
+				: true;
+		},
 	});
 
 	return {
 		prompts,
-		message: function(opt, answers) {
-			let subject = answers.subject || Array.isArray(opt.message)? opt.message[0] : opt.message,
+		message: function (opt, answers) {
+			let subject =
+					answers.subject ??
+					(Array.isArray(opt.message) ? opt.message[0] : opt.message),
 				message = [];
 			subject = subject.charAt(0).toLowerCase() + subject.slice(1);
 
 			if (Array.isArray(opt.message)) {
-				let message = opt.message.splice(0, 1).map(m => `${m}`).join('\\n');
+				let message = opt.message
+					.splice(0, 1)
+					.map((m) => `${m}`)
+					.join('\\n');
 				subject = `${subject}\n\n${message}`;
 			}
 			message.push(`${answers.type}(${answers.scope}): ${subject}`);
@@ -126,14 +140,15 @@ async function semantic(opt) {
 				message.push(answers.body);
 			}
 
-			if(answers.breakingChange) {
-				message.push(`BREAKING CHANGE: ${answers.breakingChangeMessage}`);
+			if (answers.breakingChange) {
+				message.push(
+					`BREAKING CHANGE: ${answers.breakingChangeMessage}`
+				);
 			}
 
 			return message.join('\n\n');
-		}
+		},
 	};
-
 }
 
 async function simple(opt) {
@@ -144,7 +159,7 @@ async function simple(opt) {
 			type: 'input',
 			message: 'JIRA code:',
 			name: 'branch',
-			default: branch
+			default: branch,
 		});
 	}
 
@@ -154,8 +169,10 @@ async function simple(opt) {
 			message: 'Commit message:',
 			name: 'commit',
 			validate: function (answer) {
-				return answer.trim() === '' ? 'You should write a message for your commit' : true;
-			}
+				return answer.trim() === ''
+					? 'You should write a message for your commit'
+					: true;
+			},
 		});
 	}
 
@@ -165,30 +182,30 @@ async function simple(opt) {
 			message: 'Body:',
 			name: 'body',
 			validate: function (answer) {
-				return answer.trim() === '' ? 'You should add a description for your commit' : true;
-			}
+				return answer.trim() === ''
+					? 'You should add a description for your commit'
+					: true;
+			},
 		});
 	}
 
 	return {
 		prompts,
-		message: function(opt, answers) {
+		message: function (opt, answers) {
 			let message = answers.commit || opt.message,
 				branch = answers.branch ? `[${answers.branch}] ` : '',
-				body = answers.body? `\\n\\n${answers.body}` : '';
+				body = answers.body ? `\\n\\n${answers.body}` : '';
 
 			if (Array.isArray(message)) {
-				message = message.map(m => `${m}`).join('\\n');
+				message = message.map((m) => `${m}`).join('\\n');
 			}
 			return `${branch}${message}${body}`;
-		}
+		},
 	};
-    
 }
 
-
 module.exports = async function (opt) {
-	const commitType = opt.semantic? await semantic(opt) : await simple(opt),
+	const commitType = opt.semantic ? await semantic(opt) : await simple(opt),
 		prompts = commitType.prompts;
 
 	prompts.push(await authorList());
@@ -196,7 +213,9 @@ module.exports = async function (opt) {
 	await authors.default(answers.authors);
 
 	let command = ['git commit'],
-		formattedAuthors = answers.authors.map(author => `Co-authored-by: ${author.name} <${author.email}>`).join('\\n'),
+		formattedAuthors = answers.authors
+			.map((author) => `Co-authored-by: ${author.name} <${author.email}>`)
+			.join('\\n'),
 		message = commitType.message(opt, answers);
 	if (formattedAuthors) {
 		message += `\\n\\n${formattedAuthors}`;
@@ -211,10 +230,8 @@ module.exports = async function (opt) {
 	}
 	command.push(`-m$'${message}'`);
 
-	exec(command.join(' '), (_, stdout) => {
-		if (opt.dryrun) {
-			console.log(`==== Commit message ====\n\n${message.replace(/\\n/g, '\n')}\n\n========================\n\n`);
-		}
-		console.log(`${stdout}`);
-	});
+	const commandExec = exec(command.join(' '));
+	commandExec.stdout.pipe(process.stdout);
+	commandExec.stdin.pipe(process.stdin);
+	commandExec.stderr.pipe(process.stderr);
 };
