@@ -21,7 +21,7 @@
 	},
 	"devDependencies": {
 		"eslint": "7.32.0",
-		"semantic-release": "^17.4.7"
+		"semantic-release": "^19.0.3"
 	},
 	"repository": {
 		"type": "git",
